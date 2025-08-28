@@ -102,6 +102,7 @@ public class SemifinalService implements Tickable {
             int index = reader.isPercentage()
                     ? (int)Math.ceil((1D - 1D*reader.getLimit()/100)*(games.size() - 1))
                     : (games.size() - Math.min(reader.getLimit(), games.size()));
+//                    : Math.min(reader.getLimit(), games.size() - 1);
 
             // если на границе "отрезания" есть участники с тем же числом очков,
             // что и последний "проскочивший" участник, мы должны оставить их всех

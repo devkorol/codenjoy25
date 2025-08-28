@@ -94,7 +94,7 @@ License along with this program.  If not, see
                 <c:if test="${opened}">
                     <form:errors path="readableName" cssClass="error-message" />
                     <div id="readableName" class="field not-valid" not-empty>
-                        <form:input type="text" placeholder="FirstName LastName" path="readableName"/>
+                        <form:input type="text" placeholder="FirstName LastName or nICknAMe" path="readableName"/>
                         <span class="icon fa"></span>
                     </div>
 

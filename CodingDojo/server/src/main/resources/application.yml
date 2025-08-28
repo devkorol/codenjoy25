@@ -38,7 +38,7 @@ board.save.ticks: 1
 registration:
   opened: true
   nickname:
-    allowed: false
+    allowed: true
   password:
     min-length: 8
     autogen-length: 8
@@ -52,7 +52,7 @@ page:
     url: ''
   admin:
     url: ''
-  help.language: ''
+  help.language: 'en'
 
 email:
   verification: false
@@ -69,7 +69,7 @@ database:
 
 admin:
   login: admin@codenjoyme.com
-  password: admin
+  password: I7x04BYSVrgF
 
 log:
   debug: false

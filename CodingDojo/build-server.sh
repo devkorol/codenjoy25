@@ -22,7 +22,6 @@
 # #L%
 ###
 
-cd ..
 
 export ROOT=$PWD
 
