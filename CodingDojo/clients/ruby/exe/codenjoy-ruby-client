@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'codenjoy/client'
+
+game = Codenjoy::Client::Game::new
+sourse = "#{game.source_path}/game_base_client.rb"
+dest = "#{Dir.pwd}/game_base_client.rb"
+
+puts "codenjoy-ruby-client util for develop ruby client for https://dojorena.io/"
+puts "--game flag if you are learning with codenjoy"
+puts "--game common cases"
+puts "Use --dev flag if you are developing codenjoy"
+puts "--dev for dev mode"
+
+if ['--dev', '--game'].include?(ARGV[0])
+  p "#{sourse} ==> #{dest}"
+  if File.exist?(dest)
+    p "File already exist"
+  else
+    FileUtils.cp(sourse, dest)
+    if '--dev' == ARGV[0]
+      text = "require 'bundler/setup'\n#{File.read(dest)}"
+      File.open(dest, "w") { |file| file.write(text) }
+    end
+  end
+end

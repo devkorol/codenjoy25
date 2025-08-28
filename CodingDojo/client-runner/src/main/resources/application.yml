@@ -1,0 +1,16 @@
+server:
+  servlet.context-path: ${context:/client-runner}
+  port: 8081
+
+service:
+  solutions:
+    path: ./solutions
+    pattern: yyyy-MM-dd'_'HH-mm-ss
+  serverRegex: "^https?://[0-9A-Za-z_.\\-:]+/codenjoy-contest/board/player/([\\w]+)\\?code=([\\w]+)"
+
+docker:
+  dockerfilesFolder: /dockerfiles
+  container:
+    memoryLimitMB: 0
+    cpuPeriod: 100000
+    cpuQuota: -1

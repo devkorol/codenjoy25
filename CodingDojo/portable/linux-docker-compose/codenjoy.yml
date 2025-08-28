@@ -1,0 +1,58 @@
+version: '3.3'
+
+services:
+   codenjoy_server:
+     depends_on:                                            #!L#
+       - codenjoy_db                                        #!L#
+     image: apofig/codenjoy-contest:${CODENJOY_VERSION}
+     container_name: codenjoy-contest
+     build:
+        context: ./applications
+        dockerfile: Dockerfile-contest
+        args:
+          WAR_FILE: ./codenjoy-contest.war
+          MAINTAINER_NAME: ${MAINTAINER_NAME}
+          MAINTAINER_EMAIL: ${MAINTAINER_EMAIL}
+     volumes:
+#       - ./materials/codenjoy/database:/app/database       #L#
+       - ./logs/codenjoy:/app/logs
+       - /etc/localtime:/etc/localtime:ro
+#     ports:                                                #P#
+#       - "${CODENJOY_PORT}:8080"                           #P#
+     restart: always
+     environment:
+         SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES}
+         CONTEXT: /${CODENJOY_CONTEXT}
+         GAME_SAVE_AUTO: ${CODENJOY_GAME_SAVE_AUTO}
+         GAME_SAVE_LOAD_ON_START: ${CODENJOY_GAME_SAVE_LOAD_ON_START}
+         BOARD_SAVE_TICKS: 1
+         GAME_AI: ${CODENJOY_GAME_AI}
+         LOG_DEBUG: "false"
+         PAGE_MAIN:
+         PAGE_MAIN_UNAUTHORIZED: ${CODENJOY_PAGE_MAIN_UNAUTHORIZED}
+         PAGE_REGISTRATION:
+         PAGE_HELP_LANGUAGE: ${PAGE_HELP_LANGUAGE}
+         EMAIL_VERIFICATION: "false"
+         EMAIL_PASSWORD:
+         EMAIL_NAME: info@codenjoy.com
+         DONATE_CODE:
+         DATABASE_HOST: codenjoy_db
+         DATABASE_PORT: 5432
+         DATABASE_NAME: ${CODENJOY_POSTGRES_DB}
+         DATABASE_USER: ${CODENJOY_POSTGRES_USER}
+         DATABASE_PASSWORD: ${CODENJOY_POSTGRES_PASSWORD}
+         ADMIN_LOGIN: ${ADMIN_USER}
+         ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+         SERVER_IP: ${SERVER_IP}
+         SERVER_XFRAMEALLOWEDHOSTS: ${CODENJOY_XFRAMEALLOWEDHOSTS}
+     networks:
+         codenjoy:
+             ipv4_address: 172.28.1.2
+
+   nginx:
+     depends_on:
+       - codenjoy_server
+     volumes:
+       - ./config/nginx/conf.d/codenjoy/locations.conf:/etc/nginx/conf.d/codenjoy/locations.conf
+       - ./config/nginx/conf.d/codenjoy/redirect.conf:/etc/nginx/conf.d/codenjoy/redirect.conf
+       - ./config/nginx/conf.d/codenjoy/upstreams.conf:/etc/nginx/conf.d/codenjoy/upstreams.conf

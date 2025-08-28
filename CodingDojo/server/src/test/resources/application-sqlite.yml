@@ -1,0 +1,8 @@
+database:
+  files:
+    log: target/logs.db
+    saves: target/saves.db
+    users: target/users.db
+    payment: target/payment.db
+    settings: target/settings.db
+    messages: target/messages.db

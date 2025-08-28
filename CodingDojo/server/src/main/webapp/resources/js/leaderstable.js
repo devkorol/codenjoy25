@@ -1,0 +1,182 @@
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2012 - 2022 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue){
+
+    var leaderboard = $("#leaderboard");
+    leaderboard.show();
+
+    function getAllValues(data) {
+        var result = {};
+        var players = Object.keys(data);
+        for (var index in players) {
+            var player = players[index];
+            var scores = data[player].scores;
+            var scoresPlayers = Object.keys(scores);
+            for (var index2 in scoresPlayers) {
+                var player2 = scoresPlayers[index2];
+                var score = scores[player2];
+                result[player2] = score;
+            }
+        }
+        return result;
+    }
+
+    function getReadableNames(data) {
+        var result = {};
+        var players = Object.keys(data);
+        for (var index in players) {
+            var player = players[index];
+            var names = data[player].readableNames;
+            var namesPlayers = Object.keys(names);
+            for (var index2 in namesPlayers) {
+                var player2 = namesPlayers[index2];
+                var name = names[player2];
+                result[player2] = name;
+            }
+        }
+        return result;
+    }
+
+    function getTeamsCount(teams) {
+        var result = [];
+        for (var index in teams) {
+            var team = teams[index];
+            if (!result.includes(team)) {
+                result.push(team);
+            }
+        }
+        return result;
+    }
+
+    function getTeams(data) {
+        var result = {};
+        var players = Object.keys(data);
+        for (var index in players) {
+            var player = players[index];
+            var teams = data[player].teams;
+            var teamsPlayers = Object.keys(teams);
+            for (var index2 in teamsPlayers) {
+                var player2 = teamsPlayers[index2];
+                var team = teams[player2];
+                result[player2] = team + 1;
+            }
+        }
+        return result;
+    }
+
+    function sortByScore(data) {
+        var vals = new Array();
+
+        for (i in data) {
+            var score = data[i];
+            if (!!onParseValue) {
+                score = onParseValue(score);
+            }
+            vals.push([i, score, data[i]])
+        }
+        vals = vals.sort(function(a, b) {
+            return b[1] - a[1];
+        });
+
+        var result = new Object();
+
+        for (i in vals) {
+            result[vals[i][0]] = vals[i][2];
+        }
+
+        return result;
+    }
+
+    function drawLeaderTable(data) {
+        if (data == null) {
+            $("#table-logs-body").empty();
+            return;
+        }
+        var scores = getAllValues(data);
+        var readableNames = getReadableNames(data);
+        var teams = getTeams(data);
+        var teamsCount = getTeamsCount(teams);
+        if (scores == null) {
+            $("#table-logs-body").empty();
+            return;
+        }
+
+        scores = sortByScore(scores);
+
+        if (!onDrawItem) {
+            onDrawItem = function(count, you, link, name, team, score) {
+                return '<tr>' +
+                        '<td>' + count + '</td>' +
+                        '<td>' + '<a href="' + link + '">' + name + '</a>' +
+                            '<span class="team-pow">' + team + '</span>' +
+                            '<span>' + you + '</span>' +
+                        '</td>' +
+                        '<td class="center">' + score + '</td>' +
+                    '</tr>';
+            }
+        }
+
+        var tbody = '';
+        var count = 0;
+        $.each(scores, function (email, score) {
+            var name = readableNames[email];
+            var team = (teamsCount.length == 1) ? '' : ('[' + teams[email] + ']');
+
+            var you = '';
+            if (!!playerId) {
+                you = (name == readableNames[playerId]) ? "*" : "";
+            }
+
+            count++;
+            var link = contextPath + '/board/player/' + email + ((!!code)?('?code=' + code):"");
+            tbody += onDrawItem(count, you, link, name, team, score);
+
+        });
+
+        $("#table-logs-body").empty().append(tbody);
+        leaderboard.trigger($.Event('resize'));
+    }
+
+    function isEmpty(map) {
+       for (var key in map) {
+          if (map.hasOwnProperty(key)) {
+             return false;
+          }
+       }
+       return true;
+    }
+
+    $('body').bind("board-updated", function(event, data) {
+        if (!isEmpty(data)) {
+            drawLeaderTable(data);
+        }
+    });
+};
+
+function cleanPlayerScores() {
+    deleteData('/rest/game/scores',
+        function () {
+            // do nothing
+        }, function () {
+            console.error('Failed to cleanup score');
+        });
+}

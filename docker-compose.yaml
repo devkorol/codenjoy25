@@ -1,0 +1,39 @@
+version: '3.3'
+
+services:
+  codenjoy_db:
+    image: postgres:15.6
+    container_name: codenjoy_db
+    restart: on-failure
+    volumes:
+      - codenjoy_db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: codenjoy
+      POSTGRES_USER: codenjoy
+      POSTGRES_PASSWORD: localpwd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 256M
+
+  codenjoy_contest:
+    container_name: codenjoy_contest
+    restart: on-failure
+    depends_on:
+      - codenjoy_db
+    build:
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: 'postgres,debug'
+    ports:
+      - 8080:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 1024M
+
+volumes:
+  codenjoy_db_data:
+

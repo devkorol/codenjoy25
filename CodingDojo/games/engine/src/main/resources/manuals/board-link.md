@@ -1,0 +1,1 @@
+<img src="/codenjoy-contest/resources/${game}/img/board/large.png" style="height:auto;" />

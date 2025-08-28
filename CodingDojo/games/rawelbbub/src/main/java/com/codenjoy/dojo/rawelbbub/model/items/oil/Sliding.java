@@ -1,0 +1,86 @@
+package com.codenjoy.dojo.rawelbbub.model.items.oil;
+
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2012 - 2022 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+import com.codenjoy.dojo.rawelbbub.model.Field;
+import com.codenjoy.dojo.rawelbbub.model.Hero;
+import com.codenjoy.dojo.rawelbbub.services.GameSettings;
+import com.codenjoy.dojo.services.Direction;
+
+import static com.codenjoy.dojo.games.rawelbbub.Element.PRIZE_NO_SLIDING;
+import static com.codenjoy.dojo.rawelbbub.services.GameSettings.Keys.OIL_SLIPPERINESS;
+
+public class Sliding {
+
+    private Field field;
+    private int tick;
+    private Direction before;
+
+    private GameSettings settings;
+
+    public Sliding(Field field, Direction before, GameSettings settings) {
+        this.field = field;
+        this.before = before;
+        this.settings = settings;
+    }
+
+    public Direction previousDirection() {
+        return before;
+    }
+
+    public boolean lastSlipperiness() {
+        return tick == slipperiness();
+    }
+
+    private int slipperiness() {
+        return settings.integer(OIL_SLIPPERINESS);
+    }
+
+    public Direction affect(Direction current) {
+        if (tick == slipperiness()) {
+            tick = 0;
+            before = current;
+        } else {
+            // ignore current direction because sliding
+        }
+
+        tick++;
+
+        return before;
+    }
+
+    public boolean active(Hero hero) {
+        return field.isOil(hero)
+                && slipperiness() != 0
+                && !hero.prizes().contains(PRIZE_NO_SLIDING);
+    }
+
+    public void stop() {
+        tick = slipperiness();
+    }
+
+    public void reset(Direction direction) {
+        tick = 0;
+        before = direction;
+    }
+}

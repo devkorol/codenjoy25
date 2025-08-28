@@ -1,0 +1,77 @@
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2012 - 2022 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="webjars/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="webjars/bootstrap/4.6.0/css/bootstrap-theme.min.css">
+    <script src="webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+
+    <script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="js/index.js"></script>
+
+    <title>Codenjoy solution runner</title>
+</head>
+
+<body>
+    <div class="mt-5">
+        <div class="mb-5">
+            <h1 class="text-center">Welcome to Codenjoy Solution Runner</h1>
+            <p class="text-center fw-light">Give me your repo and Codenjoy server URL and magic you will see</p>
+        </div>
+        <div class="container">
+            <div class="row">
+                <form class="col-sm">
+                    <div class="container-fluid d-flex form-group mb-2">
+                        <label class="col-3 control-label">Solution Git Repo</label>
+                        <div class="col-sm">
+                            <input class="form-control input-xs" id="repo"
+                                placeholder="https://github.com/pumkin/codenjoy-game-client.git">
+                        </div>
+                    </div>
+                    <div class="container-fluid d-flex form-group mb-2">
+                        <label class="col-3 control-label ts-2">Codenjoy Server URL</label>
+                        <div class="col-9">
+                            <input class="form-control input-xs" id="serverUrl"
+                                placeholder="https://codenjoy.com/codenjoy-contest/board/player/pupkin?code=77777">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col text-center">
+                    <input id="btnsubmit" type="button" value="Let's Go"
+                        class="btn btn-outline-primary btn-lg">
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+.participantHeader {
+    display: flex;
+    align-items: center;
+}
+
+.toTop,
+.toMyPosition,
+.freeMove,
+.watchPosition {
+    cursor: pointer;
+}
+
+.toTop {
+    margin-left: 10px;
+    color: rgb(163, 198, 68);
+}
+
+.watchPosition {
+    margin-left: 10px;
+    color: rgb(235, 106, 90);
+}
+
+.freeMove {
+    margin-left: 10px;
+    color: gray;
+}
+
+.toMyPosition {
+    margin-left: 10px;
+    color: rgb(65, 199, 220);
+}
+
+:root {
+    --lampSize: 17pxpx;
+    --marginLeft: 10px;
+}
+
+.exitedRoom {
+    font-size: var(--lampSize);
+    cursor: pointer;
+    margin-left: var(--marginLeft);
+    color: rgb(221, 98, 98);
+}
+
+.joinedRoom {
+    font-size: var(--lampSize);
+    cursor: pointer;
+    margin-left: var(--marginLeft);
+    color: rgb(61, 228, 10);
+}
+
+.actionInProgress {
+    font-size: var(--lampSize);
+    margin-left: var(--marginLeft);
+    color: rgb(196, 197, 183);
+}
+
+.exitedRoomRequest {
+    font-size: var(--lampSize);
+    animation: exitPulse 1s infinite;
+    margin-left: var(--marginLeft);
+    color: rgb(196, 197, 183);
+}
+
+@keyframes exitPulse {
+    0% {
+        color: rgb(196, 197, 183);
+    }
+    100% {
+        color: rgb(96, 94, 184);
+    }
+}
+
+.joinedRoomRequest {
+    animation: joinPulse 1s infinite;
+    margin-left: 10px;
+    color: rgb(196, 197, 183);
+}
+
+@keyframes joinPulse {
+    0% {
+        color: rgb(196, 197, 183);
+    }
+    100% {
+        color: rgb(251, 255, 0);
+    }
+}

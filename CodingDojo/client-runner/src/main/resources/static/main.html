@@ -1,0 +1,140 @@
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2012 - 2022 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="webjars/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="webjars/bootstrap/4.6.0/css/bootstrap-theme.min.css">
+    <script src="webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+
+    <script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="js/main.js"></script>
+
+    <title>Codenjoy solution runner</title>
+</head>
+
+<body>
+    <div class="container-fuid p-4" style="height: 100vh">
+        <div class="row" style="height: 100%">
+            <div class="col-4">
+                <div class="card bg-light mr-5">
+                    <div style="position:absolute; top:0; right:0;">
+                        <button type="button" class="mb-2 btn btn-link fw-light" id="editButton">Edit</button>
+                    </div>
+                    <div class="card-header">Info</div>
+                    <div class="card-body" style="padding-top: 0;">
+                        <br />
+                        <p class="card-text fw-light">Codenjoy URL: <span class="text-muted" id="serverUrl"></span>
+                        </p>
+                        <p class="card-text fw-light">Git URL: <span class="text-muted" id="repo"></span></p>
+                        <hr />
+                        <div class="container-flex">
+                            <div class="row">
+                                <div class="col-12 my-auto">
+                                    <p class="card-text text-nowrap">Total solutions: <span class="text-muted"
+                                            id="solutionsCount">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-lg btn btn-outline-primary text-nowrap" style="margin: 5px"
+                        id="sendButton">Send New</button>
+                </div>
+                <div class="mt-2">
+                    <p class="text-muted fw-light">To view logs or stop the solution click on it in the table.</p>
+                </div>
+            </div>
+            <div class="col-8">
+                <div id="table" style="display: none">
+                    <table class="table table-hover">
+                        <thead>
+                            <th scope="col">#</th>
+                            <th scope="col">Received</th>
+                            <th scope="col">Started</th>
+                            <th scope="col">Finished</th>
+                            <th scope="col">Status</th>
+                        </thead>
+                        <tbody id="solutionsTable">
+                        </tbody>
+                    </table>
+                    <h5 class="text-muted fw-light text-center mt-5" id="tablePlaceholder">Your solutions will appear
+                        here, go send it and watch!</h5>
+                </div>
+
+                <!-- SOLUTION INFO -->
+                <div id="solutionInfo" style="height: 100%; display: none;" >
+                    <div class="card bg-light" style="height: 100%">
+                        <div style="position:absolute; top:0; left:0;">
+                            <button type="button" class="mb-2 btn btn-link fw-light" id="stopSolutionButton">Stop</button>
+                        </div>
+                        <div style="position:absolute; top:0; right:0;">
+                            <button type="button" class="mb-2 btn btn-link fw-light" id="closeInfoButton">Close</button>
+                        </div>
+                        <div class="card-header"><br/></div>
+                        <div class="card-body" style="padding-top: 0;">
+                            <div class="container-flex h-100" style="display: flex; flex-direction: column;">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <br />
+                                        <p class="card-text fw-light h6">ID: <span class="text-muted" id="solId"></span></p>
+                                        <p class="card-text fw-light h6">Received: <span class="text-muted"
+                                                id="solReceived"></span></p>
+                                        <p class="card-text fw-light h6">Started: <span class="text-muted"
+                                                id="solStarted"></span></p>
+                                        <p class="card-text fw-light h6">Finished: <span class="text-muted"
+                                                id="solFinished"></span></p>
+                                        <p class="card-text fw-light h6">Status: <span class="text-muted"
+                                                id="solStatus"></span></p>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="flex-column flex-row mb-1" id="logSelectorBlock">
+                                        <button class="btn fw-light btn-sm btn-link" id="buildLogButton">Build log</button>
+                                        <button class="btn fw-light btn-sm btn-link" id="runtimeLogButton">Runtime log</button>
+                                    </div>
+                                </div>
+                                <div class="row" style="flex-grow: 1;">
+                                    <div class="col fill">
+                                        <div class="card bg-dark" style="height: 100%;">
+                                            <div class="text-success" style="padding: 10px; padding-top: 7px; line-height: 0.8em;" id="logField">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+version: '3.3'
+
+services:
+   codenjoy_balancer_frontend:
+     depends_on:
+       - codenjoy_balancer
+     image: apofig/codenjoy-balancer-frontend:${CODENJOY_VERSION}
+     container_name: codenjoy-balancer-frontend
+     build:
+       context: ./applications/balancer-frontend
+       dockerfile: Dockerfile
+     volumes:
+       - /etc/localtime:/etc/localtime:ro
+#     ports:                                              #P#
+#       - "${BALANCER_FRONTEND_PORT}:80"                  #P#
+     restart: always
+     networks:
+         codenjoy:
+             ipv4_address: 172.28.1.5
+
+   codenjoy_balancer:
+     depends_on:                                          #!L#
+       - codenjoy_db                                      #!L#
+     image: apofig/codenjoy-balancer:${CODENJOY_VERSION}
+     container_name: codenjoy-balancer
+     build:
+        context: ./applications
+        dockerfile: Dockerfile-balancer
+        args:
+          WAR_FILE: ./codenjoy-balancer.war
+          MAINTAINER_NAME: ${MAINTAINER_NAME}
+          MAINTAINER_EMAIL: ${MAINTAINER_EMAIL}
+     volumes:
+#       - ./materials/database:/app/database              #L#
+       - ./logs/codenjoy:/app/logs
+       - /etc/localtime:/etc/localtime:ro
+#     ports:                                              #P#
+#       - "${BALANCER_PORT}:8080"                         #P#
+     restart: always
+     environment:
+         SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES}
+         CONTEXT: /${BALANCER_CONTEXT}
+         LOG_DEBUG: "false"
+         SMS_ENABLED: ${BALANCER_SMS_ENABLED}
+         DATABASE_HOST: codenjoy_db
+         DATABASE_PORT: 5432
+         DATABASE_NAME: ${CODENJOY_POSTGRES_DB}
+         DATABASE_USER: ${CODENJOY_POSTGRES_USER}
+         DATABASE_PASSWORD: ${CODENJOY_POSTGRES_PASSWORD}
+         ADMIN_LOGIN: ${ADMIN_USER}
+         ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+         SCORE_UPDATE_TIME: 10000
+         GAME_SERVERS: ${BALANCER_GAME_SERVERS}
+         GAME_SCHEMA: http
+         GAME_BASIC_AUTH_USER: ${ADMIN_USER}
+         GAME_BASIC_AUTH_PASSWORD: ${ADMIN_PASSWORD}
+         GAME_TYPE: ${GAME}
+         GAME_ROOM: ${BALANCER_GAME_ROOM}
+         GAME_START_DAY: ${BALANCER_GAME_START_DAY}
+         GAME_END_DAY: ${BALANCER_GAME_END_DAY}
+         GAME_EXCLUDED_DAYS: ${BALANCER_GAME_EXCLUDED_DAYS}
+         GAME_FINALISTS_COUNT: ${BALANCER_GAME_FINALISTS_COUNT}
+         GAME_FINAL_TIME: ${BALANCER_GAME_FINAL_TIME}
+     networks:
+         codenjoy:
+             ipv4_address: 172.28.1.3
+
+   nginx:
+     depends_on:
+       - codenjoy_balancer
+     volumes:
+       - ./config/nginx/conf.d/balancer/locations.conf:/etc/nginx/conf.d/balancer/locations.conf
+       - ./config/nginx/conf.d/balancer/upstreams.conf:/etc/nginx/conf.d/balancer/upstreams.conf
+       - ./config/nginx/conf.d/balancer-frontend/locations.conf:/etc/nginx/conf.d/balancer-frontend/locations.conf
+       - ./config/nginx/conf.d/balancer-frontend/upstreams.conf:/etc/nginx/conf.d/balancer-frontend/upstreams.conf

@@ -1,0 +1,16 @@
+FROM ruby:3.0.0-alpine
+
+ARG SERVER_URL
+ENV SERVER_URL_VAR=$SERVER_URL
+
+ARG GAME_TO_RUN
+ENV GAME_TO_RUN_VAR=$GAME_TO_RUN
+
+WORKDIR /app
+
+ADD Gemfile .
+ADD game.rb .
+
+RUN bundle install
+
+ENTRYPOINT ruby ./game.rb "$GAME_TO_RUN_VAR" "$SERVER_URL_VAR"
